@@ -1,0 +1,7 @@
+# Sidekiq Cron Jobs Configuration
+# This file defines scheduled jobs that will be processed by Sidekiq
+
+disbursement_processing:
+  cron: '0 * * * *' # Every hour
+  class: 'DisbursementProcessingJob'
+  queue: default
