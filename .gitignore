@@ -29,3 +29,11 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Node.js
+node_modules/
+package-lock.json
+package.json
+
+# Data files (optional - uncomment if you don't want to commit CSV files)
+# *.csv

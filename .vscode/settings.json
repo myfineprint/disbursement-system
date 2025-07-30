@@ -20,16 +20,12 @@
     "rubocop": true
   },
   "[ruby]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "ruby-lsp",
-    "editor.codeActionsOnSave": {
-      "source.fixAll": "explicit",
-      "source.fixAll.rubocop": "explicit"
-    }
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "[yaml]": {
-    "editor.formatOnSave": true,
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   "[javascript]": {
     "editor.formatOnSave": true,
@@ -42,5 +38,7 @@
   "[json]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": false
 }
