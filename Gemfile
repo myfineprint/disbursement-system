@@ -41,11 +41,16 @@ gem 'sidekiq-cron'
 gem 'sorbet', group: :development
 gem 'sorbet-rails', group: :development
 gem 'sorbet-runtime'
-gem 'tapioca', require: false, group: [:development, :test]
+gem 'tapioca', require: false, group: %i[development test]
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem 'byebug'
   gem 'debug', platforms: %i[mri mingw x64_mingw]
+
+  # Testing framework
+  gem 'factory_bot_rails'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -55,4 +60,4 @@ group :development do
   gem 'rubocop-rails', require: false
 end
 
-gem "syntax_tree", "~> 6.3", :group => :development
+gem 'syntax_tree', '~> 6.3', group: :development

@@ -23,9 +23,9 @@ class DisbursementProcessingJob < ApplicationJob
         end
 
         if merchant.daily_disbursement?
-          DailyDisbursementService.new(merchant: merchant, orders:).call
+          DailyDisbursement.new(merchant: merchant, orders:).call
         elsif merchant.weekly_disbursement?
-          WeeklyDisbursementService.new(merchant: merchant, orders:).call
+          WeeklyDisbursement.new(merchant: merchant, orders:).call
         end
       end
     end

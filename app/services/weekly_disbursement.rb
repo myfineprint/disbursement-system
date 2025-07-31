@@ -1,6 +1,6 @@
 # typed: strict
 
-class WeeklyDisbursementService
+class WeeklyDisbursement
   extend T::Sig
 
   sig { params(merchant: Merchant, orders: T::Array[Order]).void }

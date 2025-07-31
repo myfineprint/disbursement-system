@@ -34,7 +34,7 @@ class Merchant < ApplicationRecord
   validates :disbursement_frequency,
             presence: true,
             inclusion: {
-              in: Frequency.values.map(&:to_s)
+              in: Frequency.values.map(&:serialize)
             }
   validates :minimum_monthly_fee, numericality: { greater_than_or_equal_to: 0 }
 
