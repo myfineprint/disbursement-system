@@ -1,3 +1,4 @@
+# typed: strict
 require "active_support/core_ext/integer/time"
 
 # The test environment is used exclusively to run your application's
@@ -34,7 +35,7 @@ Rails.application.configure do
   config.action_controller.allow_forgery_protection = false
 
   # Store uploaded files on the local file system in a temporary directory.
-  config.active_storage.service = :test
+  config.cache_store.service = :test
 
   config.action_mailer.perform_caching = false
 

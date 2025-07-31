@@ -1,3 +1,5 @@
+# typed: true
+
 class DisbursementProcessingJob < ApplicationJob
   queue_as :default
 

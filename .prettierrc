@@ -1,7 +1,7 @@
 {
   "singleQuote": true,
   "jsxSingleQuote": true,
-  "trailingComma": "es5",
+  "trailingComma": "none",
   "semi": true,
   "printWidth": 80,
   "tabWidth": 2,
@@ -9,7 +9,17 @@
   "bracketSpacing": true,
   "arrowParens": "avoid",
   "endOfLine": "lf",
+  "plugins": ["@prettier/plugin-ruby"],
+  "rubySingleQuote": true,
   "overrides": [
+    {
+      "files": "*.rb",
+      "options": {
+        "singleQuote": true,
+        "rubySingleQuote": true,
+        "parser": "ruby"
+      }
+    },
     {
       "files": "*.yml",
       "options": {

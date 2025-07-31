@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_30_221519) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_30_235412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,15 +20,16 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_30_221519) do
     t.date "live_on"
     t.string "disbursement_frequency"
     t.decimal "minimum_monthly_fee"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.index ["reference"], name: "index_merchants_on_reference", unique: true
   end
 
-  create_table "orders", id: :string, force: :cascade do |t|
+  create_table "orders", id: :string, default: -> { "(gen_random_uuid())::text" }, force: :cascade do |t|
     t.string "merchant_reference"
     t.decimal "amount"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
   end
 
 end

@@ -37,3 +37,29 @@ package.json
 
 # Data files (optional - uncomment if you don't want to commit CSV files)
 # *.csv
+
+# Ignore all logfiles and tempfiles.
+/log/*
+!/log/.keep
+/tmp
+tmp/cache
+
+# Devenv files
+.bash_history
+.byebug_history
+.guard_history
+.irb_history
+log/
+.cache
+assets_manifest_backup/
+public/assets
+REVISION
+log
+.vscode
+*.swp
+*.swo
+.tern-port
+spec/examples.txt
+log
+dump.rdb
+

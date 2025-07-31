@@ -1,3 +1,4 @@
+# typed: strict
 require 'sidekiq'
 require 'sidekiq-cron'
 

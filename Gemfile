@@ -37,6 +37,12 @@ gem 'bootsnap', require: false
 gem 'sidekiq'
 gem 'sidekiq-cron'
 
+# Sorbet for type safety
+gem 'sorbet', group: :development
+gem 'sorbet-rails', group: :development
+gem 'sorbet-runtime'
+gem 'tapioca', require: false, group: [:development, :test]
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
@@ -48,3 +54,5 @@ group :development do
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false
 end
+
+gem "syntax_tree", "~> 6.3", :group => :development

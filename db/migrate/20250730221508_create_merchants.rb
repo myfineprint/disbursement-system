@@ -1,3 +1,4 @@
+# typed: true
 class CreateMerchants < ActiveRecord::Migration[7.1]
   def change
     create_table :merchants, id: :uuid do |t|

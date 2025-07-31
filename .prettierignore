@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build outputs
+tmp/
+log/
+storage/
+
+# Database
+db/schema.rb
+
+# Generated files
+sorbet/rbi/gems/
+sorbet/rbi/dsl/
+sorbet/rbi/hidden-definitions/
+sorbet/rbi/sorbet-typed/
+
+# Lock files
+package-lock.json
+Gemfile.lock
+
+# Large data files
+*.csv
+
+# Git
+.git/
