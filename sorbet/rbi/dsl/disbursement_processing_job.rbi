@@ -9,13 +9,12 @@ class DisbursementProcessingJob
   class << self
     sig do
       params(
-        _args: T.untyped,
         block: T.nilable(T.proc.params(job: DisbursementProcessingJob).void)
       ).returns(T.any(DisbursementProcessingJob, FalseClass))
     end
-    def perform_later(*_args, &block); end
+    def perform_later(&block); end
 
-    sig { params(_args: T.untyped).returns(T.untyped) }
-    def perform_now(*_args); end
+    sig { void }
+    def perform_now; end
   end
 end

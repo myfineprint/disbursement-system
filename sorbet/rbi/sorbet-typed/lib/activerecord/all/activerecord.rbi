@@ -986,13 +986,10 @@ end
 ActiveRecord::Type::BigInteger = ActiveModel::Type::BigInteger
 ActiveRecord::Type::Binary = ActiveModel::Type::Binary
 ActiveRecord::Type::Boolean = ActiveModel::Type::Boolean
-ActiveRecord::Type::Boolean = ActiveModel::Type::Boolean
 ActiveRecord::Type::Decimal = ActiveModel::Type::Decimal
 ActiveRecord::Type::Float = ActiveModel::Type::Float
 ActiveRecord::Type::Integer = ActiveModel::Type::Integer
 ActiveRecord::Type::String = ActiveModel::Type::String
-ActiveRecord::Type::String = ActiveModel::Type::String
-ActiveRecord::Type::Value = ActiveModel::Type::Value
 ActiveRecord::Type::Value = ActiveModel::Type::Value
 
 module ActiveRecord

@@ -30,4 +30,7 @@ Metrics/BlockLength:
     - 'test/**/*'
 
 Layout/LineLength:
-  Max: 120 
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 100
