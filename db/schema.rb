@@ -10,9 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_30_235412) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_31_234532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "disbursement_orders", force: :cascade do |t|
+    t.uuid "disbursement_id"
+    t.uuid "order_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["disbursement_id"], name: "index_disbursement_orders_on_disbursement_id"
+    t.index ["order_id"], name: "index_disbursement_orders_on_order_id"
+  end
+
+  create_table "disbursements", force: :cascade do |t|
+    t.uuid "merchant_id"
+    t.string "frequency"
+    t.date "disbursement_date"
+    t.decimal "total_gross_amount", precision: 10, scale: 2
+    t.decimal "total_commission", precision: 10, scale: 2
+    t.decimal "total_net_amount", precision: 10, scale: 2
+    t.string "reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["merchant_id"], name: "index_disbursements_on_merchant_id"
+    t.index ["reference"], name: "index_disbursements_on_reference"
+  end
 
   create_table "merchants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "reference"

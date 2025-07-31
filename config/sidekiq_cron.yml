@@ -2,6 +2,5 @@
 # This file defines scheduled jobs that will be processed by Sidekiq
 
 disbursement_processing:
-  cron: '0 * * * *' # Every hour
+  cron: '0 3 * * *' # Every day at 3:00 AM
   class: 'DisbursementProcessingJob'
-  queue: default

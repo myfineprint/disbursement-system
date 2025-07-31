@@ -7,6 +7,8 @@ class Order < ApplicationRecord
              foreign_key: 'merchant_reference',
              primary_key: 'reference',
              inverse_of: :orders
+  has_many :disbursement_orders, dependent: :destroy
+  has_many :disbursements, through: :disbursement_orders
 
   validates :merchant_reference, presence: true
   validates :amount,

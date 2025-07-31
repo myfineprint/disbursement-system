@@ -30,4 +30,7 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  hello: 'Hello world'
+  errors:
+    messages:
+      already_associated_with_disbursement: 'order can only be associated with a disbursement once'

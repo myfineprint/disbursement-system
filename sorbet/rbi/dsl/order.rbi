@@ -338,6 +338,34 @@ class Order
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def create_merchant!(*args, &blk); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def disbursement_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def disbursement_ids=(ids); end
+
+    sig { returns(T::Array[T.untyped]) }
+    def disbursement_order_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def disbursement_order_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Order` class because it declared `has_many :disbursement_orders`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::DisbursementOrder::PrivateCollectionProxy) }
+    def disbursement_orders; end
+
+    sig { params(value: T::Enumerable[::DisbursementOrder]).void }
+    def disbursement_orders=(value); end
+
+    # This method is created by ActiveRecord on the `Order` class because it declared `has_many :disbursements, through: :disbursement_orders`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::Disbursement::PrivateCollectionProxy) }
+    def disbursements; end
+
+    sig { params(value: T::Enumerable[::Disbursement]).void }
+    def disbursements=(value); end
+
     sig { returns(T.nilable(::Merchant)) }
     def merchant; end
 
