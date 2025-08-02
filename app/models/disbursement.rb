@@ -4,9 +4,11 @@ class Disbursement < ApplicationRecord
   extend T::Sig
 
   # Associations
-  belongs_to :merchant, optional: false
-  has_many :disbursement_orders, dependent: :destroy
-  has_many :orders, through: :disbursement_orders
+  belongs_to :merchant, class_name: 'Merchant', optional: false
+  has_many :disbursement_orders,
+           class_name: 'DisbursementOrder',
+           dependent: :destroy
+  has_many :orders, class_name: 'Order', through: :disbursement_orders
 
   # Validations
   validates :frequency,
@@ -30,7 +32,7 @@ class Disbursement < ApplicationRecord
             numericality: {
               greater_than_or_equal_to: 0
             }
-  validates :reference, presence: true, uniqueness: true
+  validates :reference, presence: true
 
   # Scopes
   scope :daily,

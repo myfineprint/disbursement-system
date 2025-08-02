@@ -24,4 +24,5 @@ class Order < ApplicationRecord
             'DATE(orders.created_at) >= merchants.live_on'
           )
         }
+  scope :not_disbursed, -> { where.missing(:disbursement_orders) }
 end

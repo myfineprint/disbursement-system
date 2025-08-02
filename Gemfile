@@ -9,6 +9,9 @@ gem 'rails', '~> 7.1.0'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 
+# Use activerecord-import for bulk operations
+gem 'activerecord-import'
+
 # Use Puma as the web server
 gem 'puma', '~> 6.0'
 
@@ -49,6 +52,7 @@ group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
 
   # Testing framework
+  gem 'database_cleaner-active_record'
   gem 'factory_bot_rails'
   gem 'rspec-rails'
 end

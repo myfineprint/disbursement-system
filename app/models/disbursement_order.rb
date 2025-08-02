@@ -4,13 +4,6 @@ class DisbursementOrder < ApplicationRecord
   extend T::Sig
 
   # Associations
-  belongs_to :disbursement
-  belongs_to :order
-
-  # Validations
-  validates :order_id,
-            uniqueness: {
-              scope: :disbursement_id,
-              message: :already_associated_with_disbursement
-            }
+  belongs_to :disbursement, class_name: 'Disbursement', optional: false
+  belongs_to :order, class_name: 'Order', optional: false
 end

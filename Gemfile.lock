@@ -59,6 +59,8 @@ GEM
       activemodel (= 7.1.5.1)
       activesupport (= 7.1.5.1)
       timeout (>= 0.4.0)
+    activerecord-import (2.2.0)
+      activerecord (>= 4.2)
     activestorage (7.1.5.1)
       actionpack (= 7.1.5.1)
       activejob (= 7.1.5.1)
@@ -94,6 +96,10 @@ GEM
     cronex (0.15.0)
       tzinfo
       unicode (>= 0.4.4.5)
+    database_cleaner-active_record (2.2.2)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0)
+    database_cleaner-core (2.0.1)
     date (3.4.1)
     debug (1.11.0)
       irb (~> 1.10)
@@ -349,8 +355,10 @@ PLATFORMS
   arm64-darwin
 
 DEPENDENCIES
+  activerecord-import
   bootsnap
   byebug
+  database_cleaner-active_record
   debug
   factory_bot_rails
   pg (~> 1.1)

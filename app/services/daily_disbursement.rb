@@ -9,8 +9,9 @@ class DailyDisbursement
     @orders = T.let(orders, T::Array[Order])
   end
 
-  sig { returns(NilClass) }
+  sig { returns(Disbursement) }
   def call
+    Interactors::DisbursementInteractor.new(merchant:, orders:).call
   end
 
   private

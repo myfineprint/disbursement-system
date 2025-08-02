@@ -27,6 +27,8 @@ require 'rspec/rails'
 #
 # Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 
+require 'database_cleaner/active_record'
+
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
@@ -70,4 +72,12 @@ RSpec.configure do |config|
 
   # FactoryBot configuration
   config.include FactoryBot::Syntax::Methods
+
+  # Database Cleaner configuration
+  config.before(:suite) do
+    DatabaseCleaner.strategy = :transaction
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.around(:each) { |example| DatabaseCleaner.cleaning { example.run } }
 end

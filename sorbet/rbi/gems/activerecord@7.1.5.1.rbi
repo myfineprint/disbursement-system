@@ -8347,6 +8347,7 @@ class ActiveRecord::Base
   extend ::ActiveRecord::SignedId::ClassMethods
   extend ::ActiveRecord::Suppressor::ClassMethods
   extend ::ActiveRecord::Normalization::ClassMethods
+  extend ::ActiveRecord::Import::Connection
 
   # source://activerecord//lib/active_record/base.rb#309
   def __callbacks; end

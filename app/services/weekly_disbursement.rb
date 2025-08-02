@@ -9,8 +9,15 @@ class WeeklyDisbursement
     @orders = T.let(orders, T::Array[Order])
   end
 
-  sig { returns(NilClass) }
+  sig { returns(T.nilable(Disbursement)) }
   def call
+    weekday = Date.current.wday
+
+    merchant_live_on_weekday = T.must(merchant.live_on).wday
+
+    return if weekday != merchant_live_on_weekday
+
+    Interactors::DisbursementInteractor.new(merchant:, orders:).call
   end
 
   private
