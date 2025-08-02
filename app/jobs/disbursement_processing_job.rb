@@ -11,7 +11,7 @@ class DisbursementProcessingJob < ApplicationJob
   sig { void }
   def perform
     eligible_orders_to_process =
-      Order.eligible_for_disbursement(TODAY).not_disbursed
+      Order.eligible_for_disbursement(TODAY).not_disbursed.includes(:merchant)
 
     eligible_orders_to_process.in_batches(of: BATCH_SIZE) do |batch|
       grouped_merchant = batch.group_by(&:merchant)
