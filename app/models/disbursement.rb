@@ -5,10 +5,8 @@ class Disbursement < ApplicationRecord
 
   # Associations
   belongs_to :merchant, class_name: 'Merchant', optional: false
-  has_many :disbursement_orders,
-           class_name: 'DisbursementOrder',
-           dependent: :destroy
-  has_many :orders, class_name: 'Order', through: :disbursement_orders
+  has_many :commissions, dependent: :destroy
+  has_many :orders, through: :commissions
 
   # Validations
   validates :frequency,
@@ -17,32 +15,14 @@ class Disbursement < ApplicationRecord
               in: Enums::DisbursementFrequency.values.map(&:serialize)
             }
   validates :disbursement_date, presence: true
-  validates :total_gross_amount,
-            presence: true,
-            numericality: {
-              greater_than_or_equal_to: 0
-            }
-  validates :total_commission,
-            presence: true,
-            numericality: {
-              greater_than_or_equal_to: 0
-            }
-  validates :total_net_amount,
-            presence: true,
-            numericality: {
-              greater_than_or_equal_to: 0
-            }
+  validates :total_gross_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :total_commission, presence: true, numericality: { greater_than_or_equal_to: 0 }
+  validates :total_net_amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :reference, presence: true
 
   # Scopes
-  scope :daily,
-        lambda {
-          where(frequency: Enums::DisbursementFrequency::Daily.serialize)
-        }
-  scope :weekly,
-        lambda {
-          where(frequency: Enums::DisbursementFrequency::Weekly.serialize)
-        }
+  scope :daily, -> { where(frequency: Enums::DisbursementFrequency::Daily.serialize) }
+  scope :weekly, -> { where(frequency: Enums::DisbursementFrequency::Weekly.serialize) }
   scope :for_date, ->(date) { where(disbursement_date: date) }
   scope :for_merchant, ->(merchant_id) { where(merchant_id: merchant_id) }
 end

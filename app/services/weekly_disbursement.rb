@@ -12,13 +12,9 @@ class WeeklyDisbursement
 
   sig { returns(T.nilable(Disbursement)) }
   def call
-    weekday = date.wday
+    return if date.wday != T.must(merchant.live_on).wday
 
-    merchant_live_on_weekday = T.must(merchant.live_on).wday
-
-    return if weekday != merchant_live_on_weekday
-
-    Interactors::DisbursementInteractor.new(merchant:, orders:).call
+    Interactors::DisbursementInteractor.new(merchant:, orders:, date: date).call
   end
 
   private

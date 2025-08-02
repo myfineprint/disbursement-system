@@ -387,25 +387,25 @@ class Disbursement
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def build_merchant(*args, &blk); end
 
+    sig { returns(T::Array[T.untyped]) }
+    def commission_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def commission_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Disbursement` class because it declared `has_many :commissions`.
+    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
+    sig { returns(::Commission::PrivateCollectionProxy) }
+    def commissions; end
+
+    sig { params(value: T::Enumerable[::Commission]).void }
+    def commissions=(value); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def create_merchant(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def create_merchant!(*args, &blk); end
-
-    sig { returns(T::Array[T.untyped]) }
-    def disbursement_order_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def disbursement_order_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `Disbursement` class because it declared `has_many :disbursement_orders`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::DisbursementOrder::PrivateCollectionProxy) }
-    def disbursement_orders; end
-
-    sig { params(value: T::Enumerable[::DisbursementOrder]).void }
-    def disbursement_orders=(value); end
 
     sig { returns(T.nilable(::Merchant)) }
     def merchant; end
@@ -425,7 +425,7 @@ class Disbursement
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
     def order_ids=(ids); end
 
-    # This method is created by ActiveRecord on the `Disbursement` class because it declared `has_many :orders, through: :disbursement_orders`.
+    # This method is created by ActiveRecord on the `Disbursement` class because it declared `has_many :orders, through: :commissions`.
     # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
     sig { returns(::Order::PrivateCollectionProxy) }
     def orders; end
@@ -689,10 +689,10 @@ class Disbursement
     sig { void }
     def created_at_will_change!; end
 
-    sig { returns(T.nilable(::Date)) }
+    sig { returns(::Date) }
     def disbursement_date; end
 
-    sig { params(value: T.nilable(::Date)).returns(T.nilable(::Date)) }
+    sig { params(value: ::Date).returns(::Date) }
     def disbursement_date=(value); end
 
     sig { returns(T::Boolean) }
@@ -707,10 +707,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def disbursement_date_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
+    sig { returns(T.nilable([::Date, ::Date])) }
     def disbursement_date_change; end
 
-    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
+    sig { returns(T.nilable([::Date, ::Date])) }
     def disbursement_date_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -719,7 +719,7 @@ class Disbursement
     sig { returns(T.nilable(::Date)) }
     def disbursement_date_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
+    sig { returns(T.nilable([::Date, ::Date])) }
     def disbursement_date_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -734,10 +734,10 @@ class Disbursement
     sig { void }
     def disbursement_date_will_change!; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(::String) }
     def frequency; end
 
-    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    sig { params(value: ::String).returns(::String) }
     def frequency=(value); end
 
     sig { returns(T::Boolean) }
@@ -752,10 +752,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def frequency_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def frequency_change; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def frequency_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -764,7 +764,7 @@ class Disbursement
     sig { returns(T.nilable(::String)) }
     def frequency_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def frequency_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -869,10 +869,10 @@ class Disbursement
     sig { void }
     def id_will_change!; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(::String) }
     def merchant_id; end
 
-    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    sig { params(value: ::String).returns(::String) }
     def merchant_id=(value); end
 
     sig { returns(T::Boolean) }
@@ -887,10 +887,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def merchant_id_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def merchant_id_change; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def merchant_id_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -899,7 +899,7 @@ class Disbursement
     sig { returns(T.nilable(::String)) }
     def merchant_id_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def merchant_id_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -914,10 +914,10 @@ class Disbursement
     sig { void }
     def merchant_id_will_change!; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(::String) }
     def reference; end
 
-    sig { params(value: T.nilable(::String)).returns(T.nilable(::String)) }
+    sig { params(value: ::String).returns(::String) }
     def reference=(value); end
 
     sig { returns(T::Boolean) }
@@ -932,10 +932,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def reference_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def reference_change; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def reference_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -944,7 +944,7 @@ class Disbursement
     sig { returns(T.nilable(::String)) }
     def reference_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def reference_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -998,13 +998,13 @@ class Disbursement
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_created_at?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::Date), T.nilable(::Date)])) }
+    sig { returns(T.nilable([::Date, ::Date])) }
     def saved_change_to_disbursement_date; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_disbursement_date?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_frequency; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1022,31 +1022,31 @@ class Disbursement
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_id_value?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_merchant_id; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_merchant_id?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::String), T.nilable(::String)])) }
+    sig { returns(T.nilable([::String, ::String])) }
     def saved_change_to_reference; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_reference?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_total_commission; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_total_commission?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_total_gross_amount; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_total_gross_amount?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_total_net_amount; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1058,10 +1058,10 @@ class Disbursement
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_updated_at?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable(::BigDecimal)) }
+    sig { returns(::BigDecimal) }
     def total_commission; end
 
-    sig { params(value: T.nilable(::BigDecimal)).returns(T.nilable(::BigDecimal)) }
+    sig { params(value: ::BigDecimal).returns(::BigDecimal) }
     def total_commission=(value); end
 
     sig { returns(T::Boolean) }
@@ -1076,10 +1076,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def total_commission_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_commission_change; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_commission_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1088,7 +1088,7 @@ class Disbursement
     sig { returns(T.nilable(::BigDecimal)) }
     def total_commission_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_commission_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1103,10 +1103,10 @@ class Disbursement
     sig { void }
     def total_commission_will_change!; end
 
-    sig { returns(T.nilable(::BigDecimal)) }
+    sig { returns(::BigDecimal) }
     def total_gross_amount; end
 
-    sig { params(value: T.nilable(::BigDecimal)).returns(T.nilable(::BigDecimal)) }
+    sig { params(value: ::BigDecimal).returns(::BigDecimal) }
     def total_gross_amount=(value); end
 
     sig { returns(T::Boolean) }
@@ -1121,10 +1121,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def total_gross_amount_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_gross_amount_change; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_gross_amount_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1133,7 +1133,7 @@ class Disbursement
     sig { returns(T.nilable(::BigDecimal)) }
     def total_gross_amount_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_gross_amount_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1148,10 +1148,10 @@ class Disbursement
     sig { void }
     def total_gross_amount_will_change!; end
 
-    sig { returns(T.nilable(::BigDecimal)) }
+    sig { returns(::BigDecimal) }
     def total_net_amount; end
 
-    sig { params(value: T.nilable(::BigDecimal)).returns(T.nilable(::BigDecimal)) }
+    sig { params(value: ::BigDecimal).returns(::BigDecimal) }
     def total_net_amount=(value); end
 
     sig { returns(T::Boolean) }
@@ -1166,10 +1166,10 @@ class Disbursement
     sig { returns(T::Boolean) }
     def total_net_amount_came_from_user?; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_net_amount_change; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_net_amount_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1178,7 +1178,7 @@ class Disbursement
     sig { returns(T.nilable(::BigDecimal)) }
     def total_net_amount_in_database; end
 
-    sig { returns(T.nilable([T.nilable(::BigDecimal), T.nilable(::BigDecimal)])) }
+    sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def total_net_amount_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }

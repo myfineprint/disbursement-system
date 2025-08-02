@@ -329,8 +329,32 @@ class Order
   end
 
   module GeneratedAssociationMethods
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Commission) }
+    def build_commission(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Disbursement) }
+    def build_disbursement(*args, &blk); end
+
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def build_merchant(*args, &blk); end
+
+    sig { returns(T.nilable(::Commission)) }
+    def commission; end
+
+    sig { params(value: T.nilable(::Commission)).void }
+    def commission=(value); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Commission) }
+    def create_commission(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Commission) }
+    def create_commission!(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Disbursement) }
+    def create_disbursement(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(::Disbursement) }
+    def create_disbursement!(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def create_merchant(*args, &blk); end
@@ -338,33 +362,11 @@ class Order
     sig { params(args: T.untyped, blk: T.untyped).returns(::Merchant) }
     def create_merchant!(*args, &blk); end
 
-    sig { returns(T::Array[T.untyped]) }
-    def disbursement_ids; end
+    sig { returns(T.nilable(::Disbursement)) }
+    def disbursement; end
 
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def disbursement_ids=(ids); end
-
-    sig { returns(T::Array[T.untyped]) }
-    def disbursement_order_ids; end
-
-    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def disbursement_order_ids=(ids); end
-
-    # This method is created by ActiveRecord on the `Order` class because it declared `has_many :disbursement_orders`.
-    # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::DisbursementOrder::PrivateCollectionProxy) }
-    def disbursement_orders; end
-
-    sig { params(value: T::Enumerable[::DisbursementOrder]).void }
-    def disbursement_orders=(value); end
-
-    # This method is created by ActiveRecord on the `Order` class because it declared `has_many :disbursements, through: :disbursement_orders`.
-    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
-    sig { returns(::Disbursement::PrivateCollectionProxy) }
-    def disbursements; end
-
-    sig { params(value: T::Enumerable[::Disbursement]).void }
-    def disbursements=(value); end
+    sig { params(value: T.nilable(::Disbursement)).void }
+    def disbursement=(value); end
 
     sig { returns(T.nilable(::Merchant)) }
     def merchant; end
@@ -378,8 +380,20 @@ class Order
     sig { returns(T::Boolean) }
     def merchant_previously_changed?; end
 
+    sig { returns(T.nilable(::Commission)) }
+    def reload_commission; end
+
+    sig { returns(T.nilable(::Disbursement)) }
+    def reload_disbursement; end
+
     sig { returns(T.nilable(::Merchant)) }
     def reload_merchant; end
+
+    sig { void }
+    def reset_commission; end
+
+    sig { void }
+    def reset_disbursement; end
 
     sig { void }
     def reset_merchant; end
@@ -405,7 +419,10 @@ class Order
     def eager_load(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
-    def eligible_for_disbursement(*args, &blk); end
+    def eligible_for_daily_disbursement(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def eligible_for_weekly_disbursement(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def except(*args, &blk); end
@@ -946,7 +963,10 @@ class Order
     def eager_load(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
-    def eligible_for_disbursement(*args, &blk); end
+    def eligible_for_daily_disbursement(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def eligible_for_weekly_disbursement(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def except(*args, &blk); end

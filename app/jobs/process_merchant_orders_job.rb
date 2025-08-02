@@ -15,14 +15,22 @@ class ProcessMerchantOrdersJob < ApplicationJob
     merchants
       .includes(:orders)
       .find_each do |merchant|
-        eligible_orders = merchant.orders.eligible_for_disbursement(Date.current).not_disbursed.to_a
-
         if merchant.daily_disbursement?
-          DailyDisbursement.new(merchant: merchant, orders: eligible_orders).call
+          eligible_daily_orders =
+            merchant.orders.eligible_for_daily_disbursement(Date.current).not_disbursed.to_a
+
+          DailyDisbursement.new(
+            merchant: merchant,
+            orders: eligible_daily_orders,
+            date: Date.current
+          ).call
         elsif merchant.weekly_disbursement?
+          eligible_weekly_orders =
+            merchant.orders.eligible_for_weekly_disbursement(Date.current).not_disbursed.to_a
+
           WeeklyDisbursement.new(
             merchant: merchant,
-            orders: eligible_orders,
+            orders: eligible_weekly_orders,
             date: Date.current
           ).call
         end

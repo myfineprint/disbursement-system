@@ -7,9 +7,7 @@ RSpec.describe DisbursementCalculator do
 
   describe '#call' do
     it 'returns a DisbursementBreakdown struct' do
-      orders = [
-        create(:order, merchant_reference: merchant.reference, amount: 100)
-      ]
+      orders = [create(:order, merchant_reference: merchant.reference, amount: 100)]
       calculator = described_class.new(orders: orders)
 
       result = calculator.call
@@ -24,8 +22,7 @@ RSpec.describe DisbursementCalculator do
   describe 'commission rate calculations' do
     context 'when order amount is below 50€' do
       it 'applies 1.00% commission rate' do
-        order =
-          create(:order, merchant_reference: merchant.reference, amount: 25.50)
+        order = create(:order, merchant_reference: merchant.reference, amount: 25.50)
         calculator = described_class.new(orders: [order])
 
         result = calculator.call
@@ -39,8 +36,7 @@ RSpec.describe DisbursementCalculator do
 
     context 'when order amount is between 50€ and 300€' do
       it 'applies 0.95% commission rate' do
-        order =
-          create(:order, merchant_reference: merchant.reference, amount: 150.00)
+        order = create(:order, merchant_reference: merchant.reference, amount: 150.00)
         calculator = described_class.new(orders: [order])
 
         result = calculator.call
@@ -54,8 +50,7 @@ RSpec.describe DisbursementCalculator do
 
     context 'when order amount is 300€ or more' do
       it 'applies 0.85% commission rate' do
-        order =
-          create(:order, merchant_reference: merchant.reference, amount: 500.00)
+        order = create(:order, merchant_reference: merchant.reference, amount: 500.00)
         calculator = described_class.new(orders: [order])
 
         result = calculator.call
@@ -81,12 +76,7 @@ RSpec.describe DisbursementCalculator do
       ]
 
       test_cases.each do |test_case|
-        order =
-          create(
-            :order,
-            merchant_reference: merchant.reference,
-            amount: test_case[:amount]
-          )
+        order = create(:order, merchant_reference: merchant.reference, amount: test_case[:amount])
         calculator = described_class.new(orders: [order])
 
         result = calculator.call
@@ -123,15 +113,9 @@ RSpec.describe DisbursementCalculator do
 
   describe 'CommissionRates enum' do
     it 'has the correct commission rates' do
-      expect(DisbursementCalculator::CommissionRates::Below50.serialize).to eq(
-        0.01
-      )
-      expect(
-        DisbursementCalculator::CommissionRates::Between50And300.serialize
-      ).to eq(0.0095)
-      expect(DisbursementCalculator::CommissionRates::Above300.serialize).to eq(
-        0.0085
-      )
+      expect(Enums::CommissionRates::Below50.serialize).to eq(0.01)
+      expect(Enums::CommissionRates::Between50And300.serialize).to eq(0.0095)
+      expect(Enums::CommissionRates::Above300.serialize).to eq(0.0085)
     end
   end
 
@@ -153,8 +137,7 @@ RSpec.describe DisbursementCalculator do
   describe 'edge cases' do
     context 'with zero amount orders' do
       it 'handles zero amounts correctly' do
-        order =
-          create(:order, merchant_reference: merchant.reference, amount: 0.00)
+        order = create(:order, merchant_reference: merchant.reference, amount: 0.00)
         calculator = described_class.new(orders: [order])
 
         result = calculator.call
@@ -179,8 +162,7 @@ RSpec.describe DisbursementCalculator do
 
     context 'with very small amounts' do
       it 'handles small amounts correctly' do
-        order =
-          create(:order, merchant_reference: merchant.reference, amount: 0.01)
+        order = create(:order, merchant_reference: merchant.reference, amount: 0.01)
         calculator = described_class.new(orders: [order])
 
         result = calculator.call

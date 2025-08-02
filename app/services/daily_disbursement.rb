@@ -3,15 +3,16 @@
 class DailyDisbursement
   extend T::Sig
 
-  sig { params(merchant: Merchant, orders: T::Array[Order]).void }
-  def initialize(merchant:, orders:)
+  sig { params(merchant: Merchant, orders: T::Array[Order], date: Date).void }
+  def initialize(merchant:, orders:, date:)
     @merchant = merchant
     @orders = T.let(orders, T::Array[Order])
+    @date = date
   end
 
   sig { returns(Disbursement) }
   def call
-    Interactors::DisbursementInteractor.new(merchant:, orders:).call
+    Interactors::DisbursementInteractor.new(merchant:, orders:, date: date).call
   end
 
   private
@@ -21,4 +22,7 @@ class DailyDisbursement
 
   sig { returns(T::Array[Order]) }
   attr_reader :orders
+
+  sig { returns(Date) }
+  attr_reader :date
 end

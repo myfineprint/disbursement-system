@@ -15,19 +15,21 @@ namespace :import do
 
     # Create temporary file with proper format
     temp_file = 'merchants_temp.csv'
+    current_time = Time.current.strftime('%Y-%m-%d %H:%M:%S')
     File.open(temp_file, 'w') do |f|
       File.foreach('merchants.csv') do |line|
         # Skip header
         next if line.start_with?('id;')
 
-        f.write(line)
+        # Append timestamp columns
+        f.write(line.strip + ";#{current_time};#{current_time}\n")
       end
     end
 
     # Build psql command - include all columns from CSV
     psql_cmd = "psql -h #{host} -p #{port} -U #{username} -d #{database}"
     psql_cmd +=
-      " -c \"\\COPY merchants (id, reference, email, live_on, disbursement_frequency, minimum_monthly_fee) FROM '#{File.expand_path(temp_file)}' WITH (FORMAT csv, DELIMITER ';', HEADER false);\""
+      " -c \"\\COPY merchants (id, reference, email, live_on, disbursement_frequency, minimum_monthly_fee, created_at, updated_at) FROM '#{File.expand_path(temp_file)}' WITH (FORMAT csv, DELIMITER ';', HEADER false);\""
 
     # Set password if provided
     ENV['PGPASSWORD'] = password if password
@@ -41,7 +43,7 @@ namespace :import do
 
     if result
       count = Merchant.count
-      puts "✅ Imported #{count} merchants using PostgreSQL COPY"
+      puts "✅ Imported #{count} merchants using merchants.csv"
     else
       puts '❌ Failed to import merchants'
       exit 1
@@ -62,19 +64,25 @@ namespace :import do
 
     # Create temporary file with proper format
     temp_file = 'orders_temp.csv'
+    current_time = Time.current.strftime('%Y-%m-%d %H:%M:%S')
     File.open(temp_file, 'w') do |f|
       File.foreach('orders.csv') do |line|
         # Skip header
         next if line.start_with?('id;')
 
-        f.write(line)
+        # Append updated_at column if not already present
+        if line.count(';') == 3 # id, merchant_reference, amount, created_at
+          f.write(line.strip + ";#{current_time}\n")
+        else
+          f.write(line)
+        end
       end
     end
 
     # Build psql command - include all columns from CSV
     psql_cmd = "psql -h #{host} -p #{port} -U #{username} -d #{database}"
     psql_cmd +=
-      " -c \"\\COPY orders (id, merchant_reference, amount, created_at) FROM '#{File.expand_path(temp_file)}' WITH (FORMAT csv, DELIMITER ';', HEADER false);\""
+      " -c \"\\COPY orders (id, merchant_reference, amount, created_at, updated_at) FROM '#{File.expand_path(temp_file)}' WITH (FORMAT csv, DELIMITER ';', HEADER false);\""
 
     # Set password if provided
     ENV['PGPASSWORD'] = password if password
@@ -88,16 +96,16 @@ namespace :import do
 
     if result
       count = Order.count
-      puts "✅ Imported #{count} orders using PostgreSQL COPY"
+      puts "✅ Imported #{count} orders using orders.csv"
     else
       puts '❌ Failed to import orders'
       exit 1
     end
   end
 
-  desc 'Import all data using PostgreSQL COPY (fastest)'
+  desc 'Import all data'
   task all: :environment do
-    puts '=== Importing All Data (PostgreSQL COPY) ==='
+    puts '=== Importing All Data==='
 
     # Import merchants first
     Rake::Task['import:merchants'].invoke
@@ -109,6 +117,6 @@ namespace :import do
     puts "Merchants: #{Merchant.count}"
     puts "Orders: #{Order.count}"
     puts "Disbursements: #{Disbursement.count}"
-    puts "Disbursement Orders: #{DisbursementOrder.count}"
+    puts "Commissions: #{Commission.count}"
   end
 end

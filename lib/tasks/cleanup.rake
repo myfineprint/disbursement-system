@@ -1,5 +1,5 @@
 namespace :cleanup do
-  desc 'Delete all data from all tables (merchants, orders, disbursements, disbursement_orders)'
+  desc 'Delete all data from all tables (merchants, orders, disbursements)'
   task all: :environment do
     puts '=== Cleaning up ALL data ==='
 
@@ -7,15 +7,15 @@ namespace :cleanup do
     merchant_count = Merchant.count
     order_count = Order.count
     disbursement_count = Disbursement.count
-    disbursement_order_count = DisbursementOrder.count
+    commission_count = Commission.count
 
     puts "Found #{merchant_count} merchants"
     puts "Found #{order_count} orders"
     puts "Found #{disbursement_count} disbursements"
-    puts "Found #{disbursement_order_count} disbursement orders"
+    puts "Found #{commission_count} commissions"
 
     if merchant_count.zero? && order_count.zero? && disbursement_count.zero? &&
-         disbursement_order_count.zero?
+         commission_count.zero?
       puts 'No data to delete!'
       return
     end
@@ -32,7 +32,7 @@ namespace :cleanup do
     puts 'Deleting all data...'
 
     # Delete in the correct order (due to foreign key constraints)
-    DisbursementOrder.delete_all
+    Commission.delete_all
     Disbursement.delete_all
     Order.delete_all
     Merchant.delete_all
@@ -41,6 +41,6 @@ namespace :cleanup do
     puts "Deleted #{merchant_count} merchants"
     puts "Deleted #{order_count} orders"
     puts "Deleted #{disbursement_count} disbursements"
-    puts "Deleted #{disbursement_order_count} disbursement orders"
+    puts "Deleted #{commission_count} commissions"
   end
 end
