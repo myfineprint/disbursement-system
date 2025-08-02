@@ -28,6 +28,7 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
+    - 'lib/tasks/*.rake'
 
 Layout/LineLength:
   Max: 120

@@ -3,15 +3,16 @@
 class WeeklyDisbursement
   extend T::Sig
 
-  sig { params(merchant: Merchant, orders: T::Array[Order]).void }
-  def initialize(merchant:, orders:)
+  sig { params(merchant: Merchant, orders: T::Array[Order], date: Date).void }
+  def initialize(merchant:, orders:, date:)
     @merchant = merchant
-    @orders = T.let(orders, T::Array[Order])
+    @orders = orders
+    @date = date
   end
 
   sig { returns(T.nilable(Disbursement)) }
   def call
-    weekday = Date.current.wday
+    weekday = date.wday
 
     merchant_live_on_weekday = T.must(merchant.live_on).wday
 
@@ -27,4 +28,7 @@ class WeeklyDisbursement
 
   sig { returns(T::Array[Order]) }
   attr_reader :orders
+
+  sig { returns(Date) }
+  attr_reader :date
 end

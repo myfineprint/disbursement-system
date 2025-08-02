@@ -21,6 +21,8 @@ class Merchant < ApplicationRecord
             }
   validates :minimum_monthly_fee, numericality: { greater_than_or_equal_to: 0 }
 
+  # Scopes
+  scope :by_reference, ->(reference) { where(reference:) }
   scope :live_as_of, ->(date = Date.current) { where(live_on: ..date) }
   scope :daily_disbursement,
         lambda {

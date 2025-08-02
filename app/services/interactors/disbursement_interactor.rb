@@ -36,10 +36,7 @@ module Interactors
     def create_disbursement_orders(disbursement)
       disbursement_orders =
         orders.map do |order|
-          DisbursementOrder.new(
-            disbursement_id: disbursement.id,
-            order_id: order.id
-          )
+          DisbursementOrder.new(disbursement_id: disbursement.id, order_id: order.id)
         end
 
       DisbursementOrder.import!(
@@ -52,10 +49,7 @@ module Interactors
 
     sig { returns(String) }
     def generate_reference
-      DisbursementReferenceGenerator.call(
-        merchant: merchant,
-        disbursement_date: Date.current
-      )
+      DisbursementReferenceGenerator.call(merchant: merchant, disbursement_date: Date.current)
     end
 
     sig { returns(DisbursementCalculator::DisbursementBreakdown) }

@@ -45,19 +45,4 @@ class Disbursement < ApplicationRecord
         }
   scope :for_date, ->(date) { where(disbursement_date: date) }
   scope :for_merchant, ->(merchant_id) { where(merchant_id: merchant_id) }
-
-  # Callbacks
-  before_validation :generate_reference, on: :create
-
-  private
-
-  sig { void }
-  def generate_reference
-    return if reference.present?
-
-    loop do
-      self.reference = "DISB#{SecureRandom.alphanumeric(8).upcase}"
-      break unless Disbursement.exists?(reference: reference)
-    end
-  end
 end

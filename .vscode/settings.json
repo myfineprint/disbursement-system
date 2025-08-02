@@ -13,7 +13,7 @@
   "prettier.printWidth": 80,
   "ruby.lint.rubocop": true,
   "ruby.format": "rubocop",
-  "ruby.rubocop.executePath": "bundle",
+  "ruby.rubocop.executePath": "",
   "ruby.rubocop.command": "bundle exec rubocop",
   "ruby.useLanguageServer": true,
   "ruby.lint": {

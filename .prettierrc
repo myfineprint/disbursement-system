@@ -2,8 +2,8 @@
   "singleQuote": true,
   "jsxSingleQuote": true,
   "trailingComma": "none",
-  "semi": true,
-  "printWidth": 80,
+  "semi": false,
+  "printWidth": 100,
   "tabWidth": 2,
   "useTabs": false,
   "bracketSpacing": true,
@@ -15,21 +15,7 @@
     {
       "files": "*.rb",
       "options": {
-        "singleQuote": true,
-        "rubySingleQuote": true,
         "parser": "ruby"
-      }
-    },
-    {
-      "files": "*.yml",
-      "options": {
-        "singleQuote": true
-      }
-    },
-    {
-      "files": "*.yaml",
-      "options": {
-        "singleQuote": true
       }
     }
   ]
