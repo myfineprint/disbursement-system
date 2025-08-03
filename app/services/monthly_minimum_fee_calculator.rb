@@ -11,7 +11,7 @@ class MonthlyMinimumFeeCalculator
 
     sig { returns(BigDecimal) }
     def total_commission
-      round_to_2_decimal_places(commissions.sum(&:commission_amount).to_d)
+      round_to_2_decimal_places(commissions.sum(&:commission_amount).to_f)
     end
 
     sig { returns(BigDecimal) }
@@ -21,7 +21,7 @@ class MonthlyMinimumFeeCalculator
 
     sig { returns(BigDecimal) }
     def monthly_fee_shortfall
-      round_to_2_decimal_places((minimum_monthly_fee - total_commission).to_d)
+      round_to_2_decimal_places((minimum_monthly_fee - total_commission).to_f)
     end
 
     sig { returns(BigDecimal) }
@@ -34,7 +34,7 @@ class MonthlyMinimumFeeCalculator
       monthly_fee_shortfall.positive?
     end
 
-    sig { params(value: BigDecimal).returns(BigDecimal) }
+    sig { params(value: Float).returns(BigDecimal) }
     def round_to_2_decimal_places(value)
       RoundToTwoDecimals.new.call(value)
     end

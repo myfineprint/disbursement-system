@@ -24,30 +24,30 @@ class DisbursementCalculator
   sig { returns(DisbursementBreakdown) }
   def call
     DisbursementBreakdown.new(
-      commission: total_commission,
-      total_net_amount:,
-      total_amount: total_order_amount
+      commission: round_to_2_decimal_places(total_commission),
+      total_net_amount: round_to_2_decimal_places(total_net_amount),
+      total_amount: round_to_2_decimal_places(total_order_amount)
     )
   end
 
   private
 
-  sig { returns(BigDecimal) }
+  sig { returns(Float) }
   def total_commission
-    round_to_2_decimal_places(orders.sum { |order| CommissionCalculator.new(order:).call }.to_d)
+    orders.sum { |order| CommissionCalculator.new(order:).call }.to_f
   end
 
-  sig { returns(BigDecimal) }
+  sig { returns(Float) }
   def total_order_amount
-    round_to_2_decimal_places(orders.sum(&:amount).to_d)
+    orders.sum(&:amount).to_f
   end
 
-  sig { returns(BigDecimal) }
+  sig { returns(Float) }
   def total_net_amount
-    round_to_2_decimal_places((total_order_amount - total_commission).to_d)
+    (total_order_amount - total_commission).to_f
   end
 
-  sig { params(value: BigDecimal).returns(BigDecimal) }
+  sig { params(value: Float).returns(BigDecimal) }
   def round_to_2_decimal_places(value)
     RoundToTwoDecimals.new.call(value)
   end

@@ -119,5 +119,6 @@ namespace :import do
     puts "Orders: #{Order.count}"
     puts "Disbursements: #{Disbursement.count}"
     puts "Commissions: #{Commission.count}"
+    puts "Monthly Minimum Fee Defaults: #{MonthlyMinimumFeeDefault.count}"
   end
 end

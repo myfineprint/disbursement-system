@@ -67,7 +67,7 @@ bundle exec rake "cleanup:all"
 **Step 2: Process Disbursements**
 
 ```bash
-bundle exec rake "disbursements:process_yearly[2022,2024]"
+bundle exec rake "disbursements:process_yearly[2022,2023]"
 ```
 
 You can replace 2022 and 2023 with any year you wish to process. This generates disbursements for each merchant based on their frequency (weekly or monthly).
@@ -102,5 +102,5 @@ For the data given in the task, this was the summary I was able to generate
 
 | Year | Number of disbursements | Amount disbursed to merchants | Amount of order fees | Number of monthly fees charged | Amount of monthly fees charged |
 | ---- | ----------------------- | ----------------------------- | -------------------- | ------------------------------ | ------------------------------ |
-| 2022 | 1509                    | 36929324.84 €                 | 333672.58 €          | 26                             | 489.30 €                       |
-| 2023 | 10403                   | 188755206.44 €                | 1710965.33 €         | 120                            | 2012.93 €                      |
+| 2022 | 1509                    | 36929324.90 €                 | 333672.58 €          | 26                             | 489.30 €                       |
+| 2023 | 10391                   | 188564626.76 €                | 1709234.08 €         | 100                            | 1679.19 €                      |

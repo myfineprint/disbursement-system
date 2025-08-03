@@ -3,7 +3,7 @@
 class RoundToTwoDecimals
   extend T::Sig
 
-  sig { params(value: BigDecimal).returns(BigDecimal) }
+  sig { params(value: Float).returns(BigDecimal) }
   def call(value)
     BigDecimal(value.to_s).round(2)
   end

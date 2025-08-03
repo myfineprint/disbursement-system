@@ -44,19 +44,9 @@ module Interactors
       commissions
     end
 
-    sig { params(order: Order).returns(BigDecimal) }
-    def calculate_commission_for_order(order)
-      round_to_2_decimal_places(commission_for_order(order).call)
-    end
-
     sig { params(order: Order).returns(CommissionCalculator) }
     def commission_for_order(order)
       CommissionCalculator.new(order:)
-    end
-
-    sig { params(value: BigDecimal).returns(BigDecimal) }
-    def round_to_2_decimal_places(value)
-      RoundToTwoDecimals.new.call(value)
     end
 
     sig { returns(Disbursement) }

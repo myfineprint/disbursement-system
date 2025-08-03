@@ -15,7 +15,7 @@ class CommissionCalculator
 
   sig { returns(BigDecimal) }
   def commission_rate_for_order
-    amount = order.amount.to_d
+    amount = order.amount.to_f
 
     case amount
     when 0...50

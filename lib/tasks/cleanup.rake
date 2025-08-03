@@ -11,11 +11,11 @@ namespace :cleanup do
     disbursement_count = Disbursement.count
     commission_count = Commission.count
 
-    puts "Found #{monthly_minimum_fee_default_count} monthly minimum fee defaults"
     puts "Found #{merchant_count} merchants"
     puts "Found #{order_count} orders"
     puts "Found #{disbursement_count} disbursements"
     puts "Found #{commission_count} commissions"
+    puts "Found #{monthly_minimum_fee_default_count} monthly minimum fee defaults"
 
     if merchant_count.zero? && order_count.zero? && disbursement_count.zero? &&
          commission_count.zero? && monthly_minimum_fee_default_count.zero?
@@ -46,5 +46,6 @@ namespace :cleanup do
     puts "Deleted #{order_count} orders"
     puts "Deleted #{disbursement_count} disbursements"
     puts "Deleted #{commission_count} commissions"
+    puts "Deleted #{monthly_minimum_fee_default_count} monthly minimum fee defaults"
   end
 end
