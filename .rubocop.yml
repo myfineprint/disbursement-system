@@ -38,3 +38,6 @@ Metrics/MethodLength:
 
 Metrics/AbcSize:
   Max: 90
+
+Layout/IndentationConsistency:
+  Enabled: true

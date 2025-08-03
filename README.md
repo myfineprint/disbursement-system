@@ -1,81 +1,106 @@
-# Disbursements - Cron Job Application
+# Disbursements System
 
 A streamlined Rails application focused on processing disbursements via scheduled background jobs.
 
-## Features
+#### 🛠 Setup Instructions
 
-- **Sidekiq** for background job processing
-- **sidekiq-cron** for scheduled job execution
-- **PostgreSQL** for data storage
-- **Redis** for job queuing
-- **RuboCop** for code quality
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/myfineprint/disbursement-system.git
+```
 
 ## Setup
 
 1. **Install dependencies:**
+
    ```bash
    bundle install
    ```
 
 2. **Setup database:**
+
    ```bash
-   rails db:create
-   rails db:migrate
+   rails db:create db:migrate
    ```
 
 3. **Start Redis:**
+
    ```bash
    brew services start redis  # macOS
+
+   redis-server # Linux
    ```
 
-4. **Start Sidekiq:**
+4. **Start Servers:**
+
    ```bash
-   bundle exec sidekiq
+   bin/rails server        # Starts the Rails server
+
+   bundle exec sidekiq     # Starts the Sidekiq worker
    ```
 
-## Cron Jobs
+5. **Run Specs:**
 
-Scheduled jobs are defined in `config/sidekiq_cron.yml`:
+   ```bash
+   bundle exec rspec spec
+   ```
 
-```yaml
-disbursement_processing:
-  cron: "0 * * * *"  # Every hour
-  class: "DisbursementProcessingJob"
-  queue: default
+## Usage guide
+
+The CSV files (orders.csv, merchants.csv) are already included in the repo.
+
+**Step 1: Import All Data**
+
+```bash
+bundle exec rake "import:all"
 ```
 
-## Job Classes
+This imports all merchants and orders from their respective CSV files.
 
-Create job classes in `app/jobs/`:
+Incase you would ike to clear all databases, you can run:
 
-```ruby
-class DisbursementProcessingJob < ApplicationJob
-  queue_as :default
-
-  def perform(*args)
-    # Your disbursement processing logic here
-    Rails.logger.info "Processing disbursements at #{Time.current}"
-  end
-end
+```bash
+bundle exec rake "cleanup:all"
 ```
 
-## Development
+**Step 2: Process Disbursements**
 
-- **Check code style:** `bundle exec rubocop`
-- **Auto-fix issues:** `bundle exec rubocop -a`
-- **Run jobs manually:** `rails console` then `DisbursementProcessingJob.perform_later`
-
-## Project Structure
-
-```
-app/
-├── jobs/           # Background job classes
-└── models/         # ActiveRecord models
-
-config/
-├── sidekiq_cron.yml    # Scheduled job definitions
-└── initializers/
-    └── sidekiq.rb      # Sidekiq configuration
+```bash
+bundle exec rake "disbursements:process_yearly[2022,2024]"
 ```
 
-This is a minimal Rails application focused on background job processing without web interface components.
+You can replace 2022 and 2023 with any year you wish to process. This generates disbursements for each merchant based on their frequency (weekly or monthly).
+
+**Step 3: Process Minimum Monthly Fee Defaults**
+
+```bash
+ bundle exec rake "monthly_minimum_defaults:process_yearly[2022,2023]"
+```
+
+This identifies merchants who didn’t generate enough in commissions to meet their minimum_monthly_fee. These merchants will be saved in a separate monthly_minimum_fee_defaults table. No fee is deducted — this step is only for tracking.
+
+**Step 4: Generate Summary Report**
+
+```bash
+ bundle exec rake "report:disbursement_summary"
+```
+
+This prints a summary grouped by year:
+
+- Number of disbursements
+
+- Total amount disbursed to merchants
+
+- Total order commissions
+
+- Number of monthly fees charged
+
+- Amount of monthly fees charged
+
+For the data given in the task, this was the summary I was able to generate
+
+| Year | Number of disbursements | Amount disbursed to merchants | Amount of order fees | Number of monthly fees charged | Amount of monthly fees charged |
+| ---- | ----------------------- | ----------------------------- | -------------------- | ------------------------------ | ------------------------------ |
+| 2022 | 1509                    | 36929324.84 €                 | 333672.58 €          | 26                             | 489.30 €                       |
+| 2023 | 10403                   | 188755206.44 €                | 1710965.33 €         | 120                            | 2012.93 €                      |
