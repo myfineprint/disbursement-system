@@ -10,6 +10,7 @@ class Merchant < ApplicationRecord
            dependent: :nullify,
            inverse_of: :merchant
   has_many :disbursements, dependent: :destroy
+  has_many :commissions, through: :orders
 
   validates :reference, presence: true, uniqueness: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -25,19 +26,9 @@ class Merchant < ApplicationRecord
   scope :by_reference, ->(reference) { where(reference:) }
   scope :live_as_of, ->(date = Date.current) { where(live_on: ..date) }
   scope :daily_disbursement,
-        lambda {
-          where(
-            disbursement_frequency:
-              Enums::DisbursementFrequency::Daily.serialize
-          )
-        }
+        -> { where(disbursement_frequency: Enums::DisbursementFrequency::Daily.serialize) }
   scope :weekly_disbursement,
-        lambda {
-          where(
-            disbursement_frequency:
-              Enums::DisbursementFrequency::Weekly.serialize
-          )
-        }
+        -> { where(disbursement_frequency: Enums::DisbursementFrequency::Weekly.serialize) }
 
   sig { returns(T::Boolean) }
   def daily_disbursement?

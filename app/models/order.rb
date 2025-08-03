@@ -14,19 +14,18 @@ class Order < ApplicationRecord
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :created_at, presence: true
 
+  scope :live_as_of,
+        ->(date = Date.current) { joins(:merchant).where(merchants: { live_on: ..date }) }
+
+  scope :created_yesterday, ->(date = Date.current) { where(created_at: date.yesterday.all_day) }
+
+  scope :created_last_week, ->(date = Date.current) { where(created_at: previous_week_range(date)) }
+
   scope :eligible_for_daily_disbursement,
-        lambda { |date = Date.current|
-          joins(:merchant).where(merchants: { live_on: ..date }).where(
-            created_at: date.yesterday.all_day
-          )
-        }
+        ->(date = Date.current) { live_as_of(date).created_yesterday(date) }
 
   scope :eligible_for_weekly_disbursement,
-        lambda { |date = Date.current|
-          joins(:merchant).where(merchants: { live_on: ..date }).where(
-            created_at: previous_week_range(date)
-          )
-        }
+        ->(date = Date.current) { live_as_of(date).created_last_week(date) }
 
   scope :not_disbursed, -> { where.missing(:commission) }
 

@@ -13,9 +13,9 @@ RSpec.describe DisbursementCalculator do
       result = calculator.call
 
       expect(result).to be_a(DisbursementCalculator::DisbursementBreakdown)
-      expect(result.commission).to be_a(Float)
-      expect(result.total_net_amount).to be_a(Float)
-      expect(result.total_amount).to be_a(Float)
+      expect(result.commission).to be_a(BigDecimal)
+      expect(result.total_net_amount).to be_a(BigDecimal)
+      expect(result.total_amount).to be_a(BigDecimal)
     end
   end
 
@@ -123,9 +123,9 @@ RSpec.describe DisbursementCalculator do
     it 'has the correct structure' do
       breakdown =
         DisbursementCalculator::DisbursementBreakdown.new(
-          commission: 1.50,
-          total_net_amount: 98.50,
-          total_amount: 100.00
+          commission: BigDecimal('1.50'),
+          total_net_amount: BigDecimal('98.50'),
+          total_amount: BigDecimal('100.00')
         )
 
       expect(breakdown.commission).to eq(1.50)

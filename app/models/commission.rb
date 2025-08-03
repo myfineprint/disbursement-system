@@ -19,9 +19,14 @@ class Commission < ApplicationRecord
               greater_than_or_equal_to: 0,
               less_than_or_equal_to: 1
             }
+  validates :commission_date, presence: true
   validates :order_id, uniqueness: true
 
   # Scopes
   scope :for_disbursement, ->(disbursement_id) { where(disbursement_id: disbursement_id) }
   scope :for_order, ->(order_id) { where(order_id: order_id) }
+  scope :for_merchant,
+        lambda { |merchant_reference|
+          joins(:order).where(orders: { merchant_reference: merchant_reference })
+        }
 end

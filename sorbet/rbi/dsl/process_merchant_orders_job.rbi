@@ -9,13 +9,14 @@ class ProcessMerchantOrdersJob
   class << self
     sig do
       params(
-        merchant_references: T::Array[::String],
+        merchant: ::Merchant,
+        date: ::Date,
         block: T.nilable(T.proc.params(job: ProcessMerchantOrdersJob).void)
       ).returns(T.any(ProcessMerchantOrdersJob, FalseClass))
     end
-    def perform_later(merchant_references:, &block); end
+    def perform_later(merchant:, date:, &block); end
 
-    sig { params(merchant_references: T::Array[::String]).void }
-    def perform_now(merchant_references:); end
+    sig { params(merchant: ::Merchant, date: ::Date).void }
+    def perform_now(merchant:, date:); end
   end
 end

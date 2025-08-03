@@ -1469,6 +1469,147 @@ Sidekiq::JobRecord::ACTIVE_JOB_PREFIX = T.let(T.unsafe(nil), String)
 # source://sidekiq//lib/sidekiq/api.rb#513
 Sidekiq::JobRecord::GLOBALID_KEY = T.let(T.unsafe(nil), String)
 
+# Automatically retry jobs that fail in Sidekiq.
+# Sidekiq's retry support assumes a typical development lifecycle:
+#
+#   0. Push some code changes with a bug in it.
+#   1. Bug causes job processing to fail, Sidekiq's middleware captures
+#      the job and pushes it onto a retry queue.
+#   2. Sidekiq retries jobs in the retry queue multiple times with
+#      an exponential delay, the job continues to fail.
+#   3. After a few days, a developer deploys a fix. The job is
+#      reprocessed successfully.
+#   4. Once retries are exhausted, Sidekiq will give up and move the
+#      job to the Dead Job Queue (aka morgue) where it must be dealt with
+#      manually in the Web UI.
+#   5. After 6 months on the DJQ, Sidekiq will discard the job.
+#
+# A job looks like:
+#
+#     { 'class' => 'HardJob', 'args' => [1, 2, 'foo'], 'retry' => true }
+#
+# The 'retry' option also accepts a number (in place of 'true'):
+#
+#     { 'class' => 'HardJob', 'args' => [1, 2, 'foo'], 'retry' => 5 }
+#
+# The job will be retried this number of times before giving up. (If simply
+# 'true', Sidekiq retries 25 times)
+#
+# Relevant options for job retries:
+#
+#  * 'queue' - the queue for the initial job
+#  * 'retry_queue' - if job retries should be pushed to a different (e.g. lower priority) queue
+#  * 'retry_count' - number of times we've retried so far.
+#  * 'error_message' - the message from the exception
+#  * 'error_class' - the exception class
+#  * 'failed_at' - the first time it failed
+#  * 'retried_at' - the last time it was retried
+#  * 'backtrace' - the number of lines of error backtrace to store
+#
+# We don't store the backtrace by default as that can add a lot of overhead
+# to the job and everyone is using an error service, right?
+#
+# The default number of retries is 25 which works out to about 3 weeks
+# You can change the default maximum number of retries in your initializer:
+#
+#   Sidekiq.default_configuration[:max_retries] = 7
+#
+# or limit the number of retries for a particular job and send retries to
+# a low priority queue with:
+#
+#    class MyJob
+#      include Sidekiq::Job
+#      sidekiq_options retry: 10, retry_queue: 'low'
+#    end
+#
+# source://sidekiq//lib/sidekiq/job_retry.rb#61
+class Sidekiq::JobRetry
+  include ::Sidekiq::Component
+
+  # @return [JobRetry] a new instance of JobRetry
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#75
+  def initialize(capsule); end
+
+  # The global retry handler requires only the barest of data.
+  # We want to be able to retry as much as possible so we don't
+  # require the job to be instantiated.
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#84
+  def global(jobstr, queue); end
+
+  # The local retry support means that any errors that occur within
+  # this block can be associated with the given job instance.
+  # This is required to support the `sidekiq_retries_exhausted` block.
+  #
+  # Note that any exception from the block is wrapped in the Skip
+  # exception so the global block does not reprocess the error.  The
+  # Skip exception is unwrapped within Sidekiq::Processor#process before
+  # calling the handle_exception handlers.
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#117
+  def local(jobinst, jobstr, queue); end
+
+  private
+
+  # source://sidekiq//lib/sidekiq/job_retry.rb#311
+  def compress_backtrace(backtrace); end
+
+  # returns (strategy, seconds)
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#213
+  def delay_for(jobinst, count, exception, msg); end
+
+  # @return [Boolean]
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#290
+  def exception_caused_by_shutdown?(e, checked_causes = T.unsafe(nil)); end
+
+  # Extract message from exception.
+  # Set a default if the message raises an error
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#303
+  def exception_message(exception); end
+
+  # source://sidekiq//lib/sidekiq/job_retry.rb#142
+  def now_ms; end
+
+  # Note that +jobinst+ can be nil here if an error is raised before we can
+  # instantiate the job instance.  All access must be guarded and
+  # best effort.
+  #
+  # source://sidekiq//lib/sidekiq/job_retry.rb#149
+  def process_retry(jobinst, msg, queue, exception); end
+
+  # source://sidekiq//lib/sidekiq/job_retry.rb#244
+  def retries_exhausted(jobinst, msg, exception); end
+
+  # source://sidekiq//lib/sidekiq/job_retry.rb#282
+  def retry_attempts_from(msg_retry, default); end
+
+  # source://sidekiq//lib/sidekiq/job_retry.rb#268
+  def send_to_morgue(msg); end
+
+  # source://sidekiq//lib/sidekiq/job_retry.rb#204
+  def time_for(item); end
+end
+
+# source://sidekiq//lib/sidekiq/job_retry.rb#73
+Sidekiq::JobRetry::DEFAULT_MAX_RETRY_ATTEMPTS = T.let(T.unsafe(nil), Integer)
+
+# Handled means the job failed but has been dealt with
+# (by creating a retry, rescheduling it, etc). It still
+# needs to be logged and dispatched to error_handlers.
+#
+# source://sidekiq//lib/sidekiq/job_retry.rb#65
+class Sidekiq::JobRetry::Handled < ::RuntimeError; end
+
+# Skip means the job failed but Sidekiq does not need to
+# create a retry, log it or send to error_handlers.
+#
+# source://sidekiq//lib/sidekiq/job_retry.rb#69
+class Sidekiq::JobRetry::Skip < ::Sidekiq::JobRetry::Handled; end
+
 # Base class for all sorted sets which contain jobs, e.g. scheduled, retry and dead.
 # Sidekiq Pro and Enterprise add additional sorted sets which do not contain job data,
 # e.g. Batches.

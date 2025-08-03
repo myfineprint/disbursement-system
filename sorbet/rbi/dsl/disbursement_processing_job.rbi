@@ -9,12 +9,13 @@ class DisbursementProcessingJob
   class << self
     sig do
       params(
+        date: T.nilable(::Date),
         block: T.nilable(T.proc.params(job: DisbursementProcessingJob).void)
       ).returns(T.any(DisbursementProcessingJob, FalseClass))
     end
-    def perform_later(&block); end
+    def perform_later(date = T.unsafe(nil), &block); end
 
-    sig { void }
-    def perform_now; end
+    sig { params(date: T.nilable(::Date)).void }
+    def perform_now(date = T.unsafe(nil)); end
   end
 end

@@ -330,6 +330,20 @@ class Merchant
 
   module GeneratedAssociationMethods
     sig { returns(T::Array[T.untyped]) }
+    def commission_ids; end
+
+    sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
+    def commission_ids=(ids); end
+
+    # This method is created by ActiveRecord on the `Merchant` class because it declared `has_many :commissions, through: :orders`.
+    # 🔗 [Rails guide for `has_many_through` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-through-association)
+    sig { returns(::Commission::PrivateCollectionProxy) }
+    def commissions; end
+
+    sig { params(value: T::Enumerable[::Commission]).void }
+    def commissions=(value); end
+
+    sig { returns(T::Array[T.untyped]) }
     def disbursement_ids; end
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }

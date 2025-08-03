@@ -1,5 +1,5 @@
 # typed: strict
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -25,14 +25,14 @@ Rails.application.configure do
     config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :memory_store
-    config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
-    }
+    config.public_file_server.headers = { 'Cache-Control' => "public, max-age=#{2.days.to_i}" }
   else
     config.action_controller.perform_caching = false
 
     config.cache_store = :null_store
   end
+
+  config.active_job.queue_adapter = :sidekiq
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   # config.active_storage.service = :local

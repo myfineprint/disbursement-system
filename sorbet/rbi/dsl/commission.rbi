@@ -469,6 +469,9 @@ class Commission
     def for_disbursement(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def for_merchant(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def for_order(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
@@ -676,6 +679,51 @@ class Commission
 
     sig { void }
     def commission_amount_will_change!; end
+
+    sig { returns(::Date) }
+    def commission_date; end
+
+    sig { params(value: ::Date).returns(::Date) }
+    def commission_date=(value); end
+
+    sig { returns(T::Boolean) }
+    def commission_date?; end
+
+    sig { returns(T.nilable(::Date)) }
+    def commission_date_before_last_save; end
+
+    sig { returns(T.untyped) }
+    def commission_date_before_type_cast; end
+
+    sig { returns(T::Boolean) }
+    def commission_date_came_from_user?; end
+
+    sig { returns(T.nilable([::Date, ::Date])) }
+    def commission_date_change; end
+
+    sig { returns(T.nilable([::Date, ::Date])) }
+    def commission_date_change_to_be_saved; end
+
+    sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
+    def commission_date_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::Date)) }
+    def commission_date_in_database; end
+
+    sig { returns(T.nilable([::Date, ::Date])) }
+    def commission_date_previous_change; end
+
+    sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
+    def commission_date_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable(::Date)) }
+    def commission_date_previously_was; end
+
+    sig { returns(T.nilable(::Date)) }
+    def commission_date_was; end
+
+    sig { void }
+    def commission_date_will_change!; end
 
     sig { returns(::BigDecimal) }
     def commission_rate; end
@@ -951,6 +999,9 @@ class Commission
     def restore_commission_amount!; end
 
     sig { void }
+    def restore_commission_date!; end
+
+    sig { void }
     def restore_commission_rate!; end
 
     sig { void }
@@ -976,6 +1027,12 @@ class Commission
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_commission_amount?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { returns(T.nilable([::Date, ::Date])) }
+    def saved_change_to_commission_date; end
+
+    sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
+    def saved_change_to_commission_date?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { returns(T.nilable([::BigDecimal, ::BigDecimal])) }
     def saved_change_to_commission_rate; end
@@ -1068,6 +1125,9 @@ class Commission
     def will_save_change_to_commission_amount?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
+    def will_save_change_to_commission_date?(from: T.unsafe(nil), to: T.unsafe(nil)); end
+
+    sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def will_save_change_to_commission_rate?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
@@ -1122,6 +1182,9 @@ class Commission
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def for_disbursement(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def for_merchant(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def for_order(*args, &blk); end

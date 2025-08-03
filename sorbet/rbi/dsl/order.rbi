@@ -412,6 +412,12 @@ class Order
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def create_with(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def created_last_week(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def created_yesterday(*args, &blk); end
+
     sig { params(value: T::Boolean).returns(PrivateAssociationRelation) }
     def distinct(value = true); end
 
@@ -499,6 +505,9 @@ class Order
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def limit(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
+    def live_as_of(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateAssociationRelation) }
     def lock(*args, &blk); end
@@ -956,6 +965,12 @@ class Order
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def create_with(*args, &blk); end
 
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def created_last_week(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def created_yesterday(*args, &blk); end
+
     sig { params(value: T::Boolean).returns(PrivateRelation) }
     def distinct(value = true); end
 
@@ -1009,6 +1024,9 @@ class Order
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def limit(*args, &blk); end
+
+    sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
+    def live_as_of(*args, &blk); end
 
     sig { params(args: T.untyped, blk: T.untyped).returns(PrivateRelation) }
     def lock(*args, &blk); end

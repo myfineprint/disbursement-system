@@ -4,9 +4,9 @@ class DisbursementCalculator
   extend T::Sig
 
   class DisbursementBreakdown < T::Struct
-    const :commission, Float
-    const :total_net_amount, Float
-    const :total_amount, Float
+    const :commission, BigDecimal
+    const :total_net_amount, BigDecimal
+    const :total_amount, BigDecimal
   end
 
   sig { params(orders: T::Array[Order]).void }
@@ -25,24 +25,24 @@ class DisbursementCalculator
 
   private
 
-  sig { returns(Float) }
+  sig { returns(BigDecimal) }
   def total_commission
-    round_to_2_decimal_places(orders.sum { |order| CommissionCalculator.new(order:).call }.to_f)
+    round_to_2_decimal_places(orders.sum { |order| CommissionCalculator.new(order:).call }.to_d)
   end
 
-  sig { returns(Float) }
+  sig { returns(BigDecimal) }
   def total_order_amount
-    round_to_2_decimal_places(orders.sum(&:amount).to_f)
+    round_to_2_decimal_places(orders.sum(&:amount).to_d)
   end
 
-  sig { returns(Float) }
+  sig { returns(BigDecimal) }
   def total_net_amount
-    round_to_2_decimal_places(total_order_amount - total_commission)
+    round_to_2_decimal_places((total_order_amount - total_commission).to_d)
   end
 
-  sig { params(value: Float).returns(Float) }
+  sig { params(value: BigDecimal).returns(BigDecimal) }
   def round_to_2_decimal_places(value)
-    value.round(2).to_f
+    BigDecimal(value.to_s).round(2)
   end
 
   sig { returns(T::Array[Order]) }

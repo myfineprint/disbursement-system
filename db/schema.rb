@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_02_194941) do
     t.string "order_id", null: false
     t.decimal "commission_amount", precision: 10, scale: 2, null: false
     t.decimal "commission_rate", null: false
+    t.date "commission_date", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["disbursement_id", "order_id"], name: "index_commissions_on_disbursement_and_order_unique", unique: true
@@ -50,7 +51,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_02_194941) do
     t.index ["reference"], name: "index_merchants_on_reference", unique: true
   end
 
-  create_table "orders", id: :string, force: :cascade do |t|
+  create_table "orders", id: :string, default: -> { "substr(md5((random())::text), 1, 12)" }, force: :cascade do |t|
     t.string "merchant_reference"
     t.decimal "amount"
     t.datetime "created_at", null: false

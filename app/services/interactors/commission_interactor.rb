@@ -1,4 +1,5 @@
 # typed: strict
+
 module Interactors
   class CommissionInteractor
     extend T::Sig
@@ -27,7 +28,8 @@ module Interactors
             disbursement_id: disbursement.id,
             order_id: order.id,
             commission_amount: commission_amount,
-            commission_rate: commission_rate
+            commission_rate: commission_rate,
+            commission_date: disbursement.disbursement_date
           )
         end
 
@@ -41,14 +43,14 @@ module Interactors
       commissions
     end
 
-    sig { params(order: Order).returns(Float) }
+    sig { params(order: Order).returns(BigDecimal) }
     def calculate_commission_for_order(order)
-      round_to_2_decimal_places(order.amount.to_f * get_commission_rate_for_order(order))
+      round_to_2_decimal_places(order.amount.to_d * get_commission_rate_for_order(order))
     end
 
-    sig { params(order: Order).returns(Float) }
+    sig { params(order: Order).returns(BigDecimal) }
     def get_commission_rate_for_order(order)
-      amount = order.amount.to_f
+      amount = order.amount.to_d
 
       case amount
       when 0...50
@@ -60,9 +62,9 @@ module Interactors
       end
     end
 
-    sig { params(value: Float).returns(Float) }
+    sig { params(value: BigDecimal).returns(BigDecimal) }
     def round_to_2_decimal_places(value)
-      value.round(2).to_f
+      BigDecimal(value.to_s).round(2)
     end
 
     sig { returns(Disbursement) }

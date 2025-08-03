@@ -8,16 +8,16 @@ class CommissionCalculator
     @order = order
   end
 
-  sig { returns(Float) }
+  sig { returns(BigDecimal) }
   def call
-    order.amount.to_f * commission_rate_for_order(order)
+    order.amount.to_d * commission_rate_for_order(order)
   end
 
   private
 
-  sig { params(order: Order).returns(Float) }
+  sig { params(order: Order).returns(BigDecimal) }
   def commission_rate_for_order(order)
-    amount = order.amount.to_f
+    amount = order.amount.to_d
 
     case amount
     when 0...50
