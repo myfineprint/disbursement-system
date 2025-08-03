@@ -4,3 +4,7 @@
 disbursement_processing:
   cron: '0 3 * * *' # Every day at 3:00 AM
   class: 'DisbursementProcessingJob'
+
+calculate_monthly_minimum_defaults:
+  cron: '0 8 1 * *' # First day of the month at 3:00 AM
+  class: 'CalculateMonthlyMinimumDefaultsJob'

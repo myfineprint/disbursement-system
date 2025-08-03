@@ -9,24 +9,34 @@ class MonthlyMinimumFeeCalculator
     const :merchant, Merchant
     const :commissions, T::Array[Commission]
 
-    sig { returns(Float) }
+    sig { returns(BigDecimal) }
     def total_commission
-      commissions.sum(&:commission_amount).to_f
+      round_to_2_decimal_places(commissions.sum(&:commission_amount).to_d)
     end
 
-    sig { returns(Float) }
+    sig { returns(BigDecimal) }
+    def minimum_monthly_fee
+      merchant.minimum_monthly_fee.to_d
+    end
+
+    sig { returns(BigDecimal) }
     def monthly_fee_shortfall
-      total_commission - merchant.minimum_monthly_fee.to_f
+      round_to_2_decimal_places((minimum_monthly_fee - total_commission).to_d)
     end
 
-    sig { returns(Float) }
+    sig { returns(BigDecimal) }
     def monthly_fee
-      monthly_fee_shortfall.negative? ? monthly_fee_shortfall.abs : 0.0
+      monthly_fee_shortfall.positive? ? monthly_fee_shortfall : 0.to_d
     end
 
     sig { returns(T::Boolean) }
     def defaulting?
-      monthly_fee_shortfall.negative?
+      monthly_fee_shortfall.positive?
+    end
+
+    sig { params(value: BigDecimal).returns(BigDecimal) }
+    def round_to_2_decimal_places(value)
+      RoundToTwoDecimals.new.call(value)
     end
   end
 
@@ -51,13 +61,12 @@ class MonthlyMinimumFeeCalculator
     end
   end
 
-  sig { returns(Commission::PrivateRelation) }
+  sig { returns(ActiveRecord::Relation) }
   def previous_month_commissions
-    previous_month = date.prev_month
-    previous_month_start = previous_month.beginning_of_month
-    previous_month_end = previous_month.end_of_month
+    month_start = date.beginning_of_month
+    month_end = date.end_of_month
 
-    Commission.where(created_at: previous_month_start..previous_month_end).includes(:merchant)
+    Commission.where(commission_date: month_start..month_end).includes(:order)
   end
 
   sig { returns(Date) }

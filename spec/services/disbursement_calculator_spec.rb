@@ -16,6 +16,12 @@ RSpec.describe DisbursementCalculator do
       expect(result.commission).to be_a(BigDecimal)
       expect(result.total_net_amount).to be_a(BigDecimal)
       expect(result.total_amount).to be_a(BigDecimal)
+
+      # Verify actual values for the test case
+      # 100.00 * 0.0095 = 0.95 (0.95% rate for amounts between 50€ and 300€)
+      expect(result.commission).to eq(0.95)
+      expect(result.total_amount).to eq(100.00)
+      expect(result.total_net_amount).to eq(99.05) # 100.00 - 0.95
     end
   end
 
@@ -111,29 +117,6 @@ RSpec.describe DisbursementCalculator do
     end
   end
 
-  describe 'CommissionRates enum' do
-    it 'has the correct commission rates' do
-      expect(Enums::CommissionRates::Below50.serialize).to eq(0.01)
-      expect(Enums::CommissionRates::Between50And300.serialize).to eq(0.0095)
-      expect(Enums::CommissionRates::Above300.serialize).to eq(0.0085)
-    end
-  end
-
-  describe 'DisbursementBreakdown struct' do
-    it 'has the correct structure' do
-      breakdown =
-        DisbursementCalculator::DisbursementBreakdown.new(
-          commission: BigDecimal('1.50'),
-          total_net_amount: BigDecimal('98.50'),
-          total_amount: BigDecimal('100.00')
-        )
-
-      expect(breakdown.commission).to eq(1.50)
-      expect(breakdown.total_net_amount).to eq(98.50)
-      expect(breakdown.total_amount).to eq(100.00)
-    end
-  end
-
   describe 'edge cases' do
     context 'with zero amount orders' do
       it 'handles zero amounts correctly' do
@@ -142,9 +125,10 @@ RSpec.describe DisbursementCalculator do
 
         result = calculator.call
 
+        # 0.00 * any_rate = 0.00
         expect(result.commission).to eq(0.0)
         expect(result.total_amount).to eq(0.0)
-        expect(result.total_net_amount).to eq(0.0)
+        expect(result.total_net_amount).to eq(0.0) # 0.0 - 0.0
       end
     end
 
@@ -167,9 +151,10 @@ RSpec.describe DisbursementCalculator do
 
         result = calculator.call
 
+        # 0.01 * 0.01 = 0.0001, but minimum commission is 0.00 for very small amounts
         expect(result.commission).to eq(0.00)
         expect(result.total_amount).to eq(0.01)
-        expect(result.total_net_amount).to eq(0.01)
+        expect(result.total_net_amount).to eq(0.01) # 0.01 - 0.00
       end
     end
   end

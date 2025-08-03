@@ -6,5 +6,6 @@ FactoryBot.define do
     association :order
     commission_amount { 1.50 }
     commission_rate { 0.0095 }
+    commission_date { Date.current }
   end
 end

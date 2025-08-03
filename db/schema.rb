@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_08_02_194941) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_03_143849) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,18 @@ ActiveRecord::Schema[7.1].define(version: 2025_08_02_194941) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["reference"], name: "index_merchants_on_reference", unique: true
+  end
+
+  create_table "monthly_minimum_fee_defaults", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "merchant_id", null: false
+    t.decimal "minimum_monthly_fee", precision: 10, scale: 2, null: false
+    t.decimal "actual_commission_paid", precision: 10, scale: 2, null: false
+    t.decimal "defaulted_amount", precision: 10, scale: 2, null: false
+    t.date "period_date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["merchant_id", "period_date"], name: "index_monthly_minimum_fee_defaults_on_merchant_and_period", unique: true
+    t.index ["merchant_id"], name: "index_monthly_minimum_fee_defaults_on_merchant_id"
   end
 
   create_table "orders", id: :string, default: -> { "substr(md5((random())::text), 1, 12)" }, force: :cascade do |t|

@@ -11,12 +11,23 @@ class ProcessMerchantOrdersJob < ApplicationJob
       eligible_daily_orders =
         merchant.orders.eligible_for_daily_disbursement(date).not_disbursed.to_a
 
-      DailyDisbursement.new(merchant: merchant, orders: eligible_daily_orders, date:).call
+      Interactors::DisbursementInteractor.new(
+        merchant: merchant,
+        orders: eligible_daily_orders,
+        date:
+      ).call
     elsif merchant.weekly_disbursement?
       eligible_weekly_orders =
         merchant.orders.eligible_for_weekly_disbursement(date).not_disbursed.to_a
 
-      WeeklyDisbursement.new(merchant: merchant, orders: eligible_weekly_orders, date:).call
+      # Only process if it's the merchant's live-on weekday
+      return unless date.wday == T.must(merchant.live_on).wday
+
+      Interactors::DisbursementInteractor.new(
+        merchant: merchant,
+        orders: eligible_weekly_orders,
+        date:
+      ).call
     end
   end
 end

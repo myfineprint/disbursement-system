@@ -333,6 +333,7 @@ GEM
       thor (>= 1.2.0)
       yard-sorbet
     thor (1.4.0)
+    timecop (0.9.10)
     timeout (0.4.3)
     tsort (0.2.0)
     tzinfo (2.0.6)
@@ -375,6 +376,7 @@ DEPENDENCIES
   sorbet-runtime
   syntax_tree (~> 6.3)
   tapioca
+  timecop
   tzinfo-data
 
 RUBY VERSION

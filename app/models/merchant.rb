@@ -11,6 +11,7 @@ class Merchant < ApplicationRecord
            inverse_of: :merchant
   has_many :disbursements, dependent: :destroy
   has_many :commissions, through: :orders
+  has_many :monthly_minimum_fee_defaults, dependent: :destroy
 
   validates :reference, presence: true, uniqueness: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }

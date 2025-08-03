@@ -42,7 +42,7 @@ class DisbursementCalculator
 
   sig { params(value: BigDecimal).returns(BigDecimal) }
   def round_to_2_decimal_places(value)
-    BigDecimal(value.to_s).round(2)
+    RoundToTwoDecimals.new.call(value)
   end
 
   sig { returns(T::Array[Order]) }
