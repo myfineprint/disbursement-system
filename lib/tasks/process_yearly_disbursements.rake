@@ -1,5 +1,7 @@
+# bundle exec rake "disbursements:process_yearly[2023]"
+# bundle exec rake "disbursements:process_yearly[2022,2024]"
 namespace :disbursements do
-  desc 'Process disbursements for a year or range of years (e.g., rake disbursements:process_yearly[2023] or rake disbursements:process_yearly[2022,2024])'
+  desc 'Process disbursements for a year or range of years'
   task :process_yearly, %i[start_year end_year] => :environment do |_task, args|
     start_year = args[:start_year]&.to_i || Date.current.year
     end_year = args[:end_year]&.to_i || start_year

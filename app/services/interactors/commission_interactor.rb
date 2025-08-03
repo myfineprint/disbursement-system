@@ -21,8 +21,9 @@ module Interactors
     def create_commission_records
       commissions =
         orders.map do |order|
-          commission_amount = calculate_commission_for_order(order)
-          commission_rate = get_commission_rate_for_order(order)
+          commission_calculator = commission_for_order(order)
+          commission_amount = commission_calculator.call
+          commission_rate = commission_calculator.commission_rate_for_order
 
           Commission.new(
             disbursement_id: disbursement.id,
@@ -45,21 +46,12 @@ module Interactors
 
     sig { params(order: Order).returns(BigDecimal) }
     def calculate_commission_for_order(order)
-      round_to_2_decimal_places(order.amount.to_d * get_commission_rate_for_order(order))
+      round_to_2_decimal_places(commission_for_order(order).call)
     end
 
-    sig { params(order: Order).returns(BigDecimal) }
-    def get_commission_rate_for_order(order)
-      amount = order.amount.to_d
-
-      case amount
-      when 0...50
-        Enums::CommissionRates::Below50.serialize
-      when 50...300
-        Enums::CommissionRates::Between50And300.serialize
-      else
-        Enums::CommissionRates::Above300.serialize
-      end
+    sig { params(order: Order).returns(CommissionCalculator) }
+    def commission_for_order(order)
+      CommissionCalculator.new(order:)
     end
 
     sig { params(value: BigDecimal).returns(BigDecimal) }

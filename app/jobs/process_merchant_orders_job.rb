@@ -11,6 +11,8 @@ class ProcessMerchantOrdersJob < ApplicationJob
       eligible_daily_orders =
         merchant.orders.eligible_for_daily_disbursement(date).not_disbursed.to_a
 
+      return if eligible_daily_orders.empty?
+
       Interactors::DisbursementInteractor.new(
         merchant: merchant,
         orders: eligible_daily_orders,
@@ -20,8 +22,9 @@ class ProcessMerchantOrdersJob < ApplicationJob
       eligible_weekly_orders =
         merchant.orders.eligible_for_weekly_disbursement(date).not_disbursed.to_a
 
-      # Only process if it's the merchant's live-on weekday
-      return unless date.wday == T.must(merchant.live_on).wday
+      return if date.wday != T.must(merchant.live_on).wday
+
+      return if eligible_weekly_orders.empty?
 
       Interactors::DisbursementInteractor.new(
         merchant: merchant,

@@ -1,5 +1,6 @@
 require 'fileutils'
 
+# bundle exec rake "import:all"
 namespace :import do
   desc 'Import merchants'
   task merchants: :environment do

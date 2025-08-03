@@ -10,13 +10,11 @@ class CommissionCalculator
 
   sig { returns(BigDecimal) }
   def call
-    order.amount.to_d * commission_rate_for_order(order)
+    order.amount.to_d * commission_rate_for_order
   end
 
-  private
-
-  sig { params(order: Order).returns(BigDecimal) }
-  def commission_rate_for_order(order)
+  sig { returns(BigDecimal) }
+  def commission_rate_for_order
     amount = order.amount.to_d
 
     case amount
@@ -28,6 +26,8 @@ class CommissionCalculator
       Enums::CommissionRates::Above300.serialize
     end
   end
+
+  private
 
   sig { returns(Order) }
   attr_reader :order

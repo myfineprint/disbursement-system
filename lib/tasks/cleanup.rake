@@ -1,21 +1,24 @@
+# bundle exec rake "cleanup:all"
 namespace :cleanup do
   desc 'Delete all data from all tables (merchants, orders, disbursements)'
   task all: :environment do
     puts '=== Cleaning up ALL data ==='
 
     # Get counts before deletion
+    monthly_minimum_fee_default_count = MonthlyMinimumFeeDefault.count
     merchant_count = Merchant.count
     order_count = Order.count
     disbursement_count = Disbursement.count
     commission_count = Commission.count
 
+    puts "Found #{monthly_minimum_fee_default_count} monthly minimum fee defaults"
     puts "Found #{merchant_count} merchants"
     puts "Found #{order_count} orders"
     puts "Found #{disbursement_count} disbursements"
     puts "Found #{commission_count} commissions"
 
     if merchant_count.zero? && order_count.zero? && disbursement_count.zero? &&
-         commission_count.zero?
+         commission_count.zero? && monthly_minimum_fee_default_count.zero?
       puts 'No data to delete!'
       return
     end
@@ -32,6 +35,7 @@ namespace :cleanup do
     puts 'Deleting all data...'
 
     # Delete in the correct order (due to foreign key constraints)
+    MonthlyMinimumFeeDefault.delete_all
     Commission.delete_all
     Disbursement.delete_all
     Order.delete_all

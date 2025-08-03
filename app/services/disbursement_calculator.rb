@@ -4,9 +4,16 @@ class DisbursementCalculator
   extend T::Sig
 
   class DisbursementBreakdown < T::Struct
+    extend T::Sig
+
     const :commission, BigDecimal
     const :total_net_amount, BigDecimal
     const :total_amount, BigDecimal
+
+    sig { returns(T::Boolean) }
+    def to_be_disbursed?
+      commission.positive? && total_net_amount.positive? && total_amount.positive?
+    end
   end
 
   sig { params(orders: T::Array[Order]).void }

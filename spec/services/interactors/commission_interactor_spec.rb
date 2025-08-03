@@ -71,15 +71,15 @@ RSpec.describe Interactors::CommissionInteractor do
         result = commission_interactor.call
 
         # Below 50€: 1.00%
-        below_50_commission = result.find { |c| c.order.amount == 25.00 }
+        below_50_commission = result.find { |c| c.order.amount == BigDecimal('25.00') }
         expect(below_50_commission.commission_rate).to eq(0.01)
 
         # Between 50€ and 300€: 0.95%
-        between_50_300_commission = result.find { |c| c.order.amount == 150.00 }
+        between_50_300_commission = result.find { |c| c.order.amount == BigDecimal('150.00') }
         expect(between_50_300_commission.commission_rate).to eq(0.0095)
 
         # Above 300€: 0.85%
-        above_300_commission = result.find { |c| c.order.amount == 500.00 }
+        above_300_commission = result.find { |c| c.order.amount == BigDecimal('500.00') }
         expect(above_300_commission.commission_rate).to eq(0.0085)
       end
     end
