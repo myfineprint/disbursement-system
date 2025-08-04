@@ -5,8 +5,8 @@ class Disbursement < ApplicationRecord
 
   # Associations
   belongs_to :merchant, class_name: 'Merchant', optional: false
-  has_many :commissions, dependent: :destroy
-  has_many :orders, through: :commissions
+  has_many :commissions, class_name: 'Commission', dependent: :nullify
+  has_many :orders, class_name: 'Order', through: :commissions
 
   # Validations
   validates :frequency,

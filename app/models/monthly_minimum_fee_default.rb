@@ -3,7 +3,7 @@
 class MonthlyMinimumFeeDefault < ApplicationRecord
   extend T::Sig
 
-  belongs_to :merchant
+  belongs_to :merchant, class_name: 'Merchant', optional: false
 
   validates :minimum_monthly_fee, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :actual_commission_paid, presence: true, numericality: { greater_than_or_equal_to: 0 }

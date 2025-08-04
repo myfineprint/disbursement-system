@@ -9,9 +9,11 @@ class Merchant < ApplicationRecord
            primary_key: 'reference',
            dependent: :nullify,
            inverse_of: :merchant
-  has_many :disbursements, dependent: :destroy
-  has_many :commissions, through: :orders
-  has_many :monthly_minimum_fee_defaults, dependent: :destroy
+  has_many :disbursements, class_name: 'Disbursement', dependent: :destroy
+  has_many :commissions, class_name: 'Commission', through: :orders
+  has_many :monthly_minimum_fee_defaults,
+           class_name: 'MonthlyMinimumFeeDefault',
+           dependent: :restrict_with_error
 
   validates :reference, presence: true, uniqueness: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }

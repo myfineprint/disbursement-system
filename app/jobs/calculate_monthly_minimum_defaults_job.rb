@@ -13,12 +13,12 @@ class CalculateMonthlyMinimumDefaultsJob < ApplicationJob
 
     defaulting_merchants = previous_month_commissions.select(&:defaulting?)
 
-    defaulting_merchants.each do |merchant_commissions|
+    defaulting_merchants.each do |merchant_commission|
       MonthlyMinimumFeeDefault.create!(
-        merchant: merchant_commissions.merchant,
-        minimum_monthly_fee: merchant_commissions.minimum_monthly_fee,
-        actual_commission_paid: merchant_commissions.total_commission,
-        defaulted_amount: merchant_commissions.monthly_fee,
+        merchant: merchant_commission.merchant,
+        minimum_monthly_fee: merchant_commission.minimum_monthly_fee,
+        actual_commission_paid: merchant_commission.total_commission,
+        defaulted_amount: merchant_commission.monthly_fee,
         period_date: beginning_of_prev_month
       )
     end

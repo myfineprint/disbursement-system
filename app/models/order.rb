@@ -7,8 +7,8 @@ class Order < ApplicationRecord
              foreign_key: 'merchant_reference',
              primary_key: 'reference',
              inverse_of: :orders
-  has_one :commission, dependent: :destroy
-  has_one :disbursement, through: :commission
+  has_one :commission, class_name: 'Commission', dependent: :destroy
+  has_one :disbursement, class_name: 'Disbursement', through: :commission, dependent: :destroy
 
   validates :merchant_reference, presence: true
   validates :amount, presence: true, numericality: { greater_than_or_equal_to: 0 }
