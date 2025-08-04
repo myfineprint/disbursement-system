@@ -2,6 +2,8 @@
 
 A streamlined Rails application focused on processing disbursements via scheduled background jobs.
 
+Thought process explained [here](https://docs.google.com/document/d/1eNjIxJrTImjgBfwkaDf5gKe7up0vExu-2xmK0zzGVaI/edit?usp=sharing)
+
 #### 🛠 Setup Instructions
 
 Clone the repository and install dependencies:
